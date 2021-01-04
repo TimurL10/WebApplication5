@@ -22,9 +22,18 @@ namespace WebApplication5.Controllers
         }
 
         [HttpGet]
-        public int Get()
+        public ReportByNet Get()
         {
-            return _reportByNet.GetReoptData();
+            ReportByNet report = new ReportByNet(
+                _reportByNet.GetStoresCount(),
+                _reportByNet.GetOrderCount(),
+                _reportByNet.GetSoldOrdersCount(),
+                _reportByNet.GetTimeOutCanceledCount(),
+                _reportByNet.CustomerCanceledOrdersCount(),
+                _reportByNet.GetNoEndStatus(),
+                _reportByNet.GetCanceledOrdCount(),
+                _reportByNet.GetNoReceiveStatusOrd());
+            return report;
         }
 
     }

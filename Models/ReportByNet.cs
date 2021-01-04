@@ -26,15 +26,63 @@ namespace WebApplication5.Models
 
         public int NoReceiveStatusOrd { get; set; }
 
+        public ReportByNet(int storesCount, int ordersCount, int soldOrders, int timeOutCanceled, int customerCanceledOrders, int noEndStatusOrd, int canceledOrd, int noReceiveStatusOrd)
+        {
+            StoresCount = storesCount;
+            OrdersCount = ordersCount;
+            SoldOrders = soldOrders;
+            TimeOutCanceled = timeOutCanceled;
+            CustomerCanceledOrders = customerCanceledOrders;
+            NoEndStatusOrd = noEndStatusOrd;
+            CanceledOrd = canceledOrd;
+            NoReceiveStatusOrd = noReceiveStatusOrd;
+        }
+
         public ReportByNet(IDbRepository dbRepository)
         {
             _dbRepository = dbRepository;
         }
 
-        public int GetReoptData()
+        public int GetStoresCount()
         {
             return _dbRepository.GetStoresCount();
         }
+
+        public int GetOrderCount()
+        {
+            return _dbRepository.GetOrderCount();
+        }
+
+        public int GetNoEndStatus()
+        {
+            return _dbRepository.GetNoEndStatus();
+        }
+        
+        public int GetSoldOrdersCount()
+        {
+            return _dbRepository.GetSoldOrdersCount();
+        }
+
+        public int GetTimeOutCanceledCount()
+        {
+            return _dbRepository.GetTimeOutCanceledCount();
+        }
+
+        public int CustomerCanceledOrdersCount()
+        {
+            return _dbRepository.CustomerCanceledOrdersCount();
+        }
+
+        public int GetCanceledOrdCount()
+        {
+            return _dbRepository.GetCanceledOrdCount();
+        }
+
+        public int GetNoReceiveStatusOrd()
+        {
+            return _dbRepository.GetNoReceiveStatusOrd();
+        }
+
 
     }
 }
