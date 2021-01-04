@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApplication5.DAL;
+using WebApplication5.Models;
 
 namespace WebApplication5
 {
@@ -26,6 +28,9 @@ namespace WebApplication5
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddScoped<IDbRepository, DbRepository>();
+            services.AddScoped<IReportByNet, ReportByNet>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
