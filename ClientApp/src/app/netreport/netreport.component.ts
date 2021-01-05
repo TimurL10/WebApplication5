@@ -1,6 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { strict } from 'assert';
-import { error } from 'console';
 import { HttpService } from 'src/app/http.service'
 import { ReportByNet } from 'src/app/reportbynet';
 
@@ -12,7 +10,7 @@ import { ReportByNet } from 'src/app/reportbynet';
     providers: [HttpService]
 })
 /** netreport component*/
-export class NetreportComponent {
+export class NetreportComponent implements OnInit {
   @Inject('BASE_URL') baseUrl: string;
   report: ReportByNet;
   /** netreport ctor */

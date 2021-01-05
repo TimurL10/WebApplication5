@@ -39,6 +39,7 @@ import { MatNativeDateModule } from '@angular/material/core';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'reportbynet', component: NetreportComponent }
     ]),
     BrowserAnimationsModule
   ],
