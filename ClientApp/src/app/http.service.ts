@@ -9,10 +9,8 @@ export class HttpService {
 
   }
 
-  getDataByNet(@Inject('BASE_URL') baseUrl: string) {
-    return this.http.get<ReportByNet>(baseUrl + 'weatherforecast').subscribe(result => {
-      this.report = result;
-    }, error => console.error(error));
+  getDataByNet(baseUrl: string) {
+    return this.http.get<ReportByNet>(baseUrl + 'reportbynet');
   }
 }
 

@@ -1,1 +1,30 @@
-﻿<div style="border: 1px solid red">netreport Component</div>
+<h1>Отчет по сети</h1>
+<table *ngIf="tableMode; else create" class="table table-striped">
+  <thead>
+    <tr>
+      <td>Кол-во аптек</td>
+      <td>Кол-во заказов</td>
+      <td>Кол-во выкупленных</td>
+      <td>Кол-во отмененных аптекой</td>
+      <td>Заказы без конечного статуса</td>
+      <td>Не принятые заказы</td>
+      <td>Отмененные клиентом</td>
+      <td>Истечение срока резерва</td>      
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of report">
+        <td>{{p?.stores_count }}</td>
+        <td>{{p?.orders_count}}</td>
+        <td>{{p?.sold_orders}}</td>
+        <td>{{p?.canceled_ord}}</td>
+        <td>{{p?.no_end_status_ord}}</td>
+        <td>{{p?.no_receive_status_ord}}</td>
+        <td>{{p?.customer_canceled_orders}}</td>
+        <td>{{p?.time_out_canceled}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+

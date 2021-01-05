@@ -6,7 +6,7 @@ export class ReportByNet {
 
         public sold_orders: number,
 
-        public time_out_cancele: number,
+        public time_out_canceled: number,
 
         public customer_canceled_orders: number,
 
