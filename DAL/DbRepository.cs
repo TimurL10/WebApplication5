@@ -24,9 +24,9 @@ namespace WebApplication5.DAL
 
         public int GetNoEndStatus()
         {
-            string startDate = "2020-12-01";
-            string endDate = "2020-12-27";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2020-12-01'";
+            string endDate = "'2020-12-27'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -42,7 +42,9 @@ namespace WebApplication5.DAL
                             WHERE n.Real_Net_Guid = {netGuid}
                             AND p.Actual = 1)
                             and h.date between {startDate} and ({endDate}) and s.status = 100
-                            and h.orderid not in (select orderid from[Documents].[OrderStatuses] where[status] in (210, 205, 202, 212, 211))");
+                            and h.orderid not in (select orderid from[Documents].[OrderStatuses] where[status] in (210, 205, 202, 212, 211))
+                            HAVING COUNT(h.number) > 0");
+
 
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
@@ -62,7 +64,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
@@ -76,9 +78,9 @@ namespace WebApplication5.DAL
         }
         public int GetStoresCount()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -93,8 +95,9 @@ namespace WebApplication5.DAL
                                     JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
                                     WHERE n.Real_Net_Guid = {netGuid}
                                     AND s.TimeStamp > {startDate}
-                                    AND s.TimeStamp < {endDate}");
-
+                                    AND s.TimeStamp < {endDate}
+                                    HAVING COUNT(DISTINCT s.StoreId) > 0");
+                Debug.WriteLine(sqlCommand);
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = spName;
@@ -112,7 +115,8 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
+                            Debug.WriteLine(result);
                         }
                     }
                     else
@@ -126,9 +130,9 @@ namespace WebApplication5.DAL
         }
         public int GetOrderCount()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -143,7 +147,8 @@ namespace WebApplication5.DAL
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
                                         AND Timestamp > {startDate}
-                                        AND Timestamp < {endDate}");
+                                        AND Timestamp < {endDate}
+                                        HAVING Count(OrderId) > 0");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -162,7 +167,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
@@ -176,9 +181,9 @@ namespace WebApplication5.DAL
         }
         public int GetSoldOrdersCount()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -194,7 +199,8 @@ namespace WebApplication5.DAL
                             WHERE n.Real_Net_Guid = {netGuid}
                             AND p.Actual = 1)
                             and h.date between {startDate} and ({endDate}) and s.status = 100
-                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (210))");
+                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (210))
+                            HAVING COUNT(h.number) > 0");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -213,7 +219,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
@@ -227,9 +233,9 @@ namespace WebApplication5.DAL
         }
         public int GetTimeOutCanceledCount()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -245,7 +251,8 @@ namespace WebApplication5.DAL
                             WHERE n.Real_Net_Guid = {netGuid}
                             AND p.Actual = 1)
                             and h.date between {startDate} and ({endDate}) and s.status = 100
-                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (205))");
+                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (205))
+                            HAVING COUNT(h.number) > 0");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -264,7 +271,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
@@ -278,9 +285,9 @@ namespace WebApplication5.DAL
         }
         public int CustomerCanceledOrdersCount()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -296,7 +303,8 @@ namespace WebApplication5.DAL
                             WHERE n.Real_Net_Guid = {netGuid}
                             AND p.Actual = 1)
                             and h.date between {startDate} and ({endDate}) and s.status = 100
-                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (211))");
+                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (211))
+                            HAVING COUNT(h.number) > 0");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -315,7 +323,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
@@ -329,9 +337,9 @@ namespace WebApplication5.DAL
         }
         public int GetCanceledOrdCount()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -347,7 +355,8 @@ namespace WebApplication5.DAL
                             WHERE n.Real_Net_Guid = {netGuid}
                             AND p.Actual = 1)
                             and h.date between {startDate} and ({endDate}) and s.status = 100
-                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (212,202))");
+                            and h.orderid in (select orderid from[Documents].[OrderStatuses] where[status] in (212,202))
+                            HAVING COUNT(h.number) > 0");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -366,7 +375,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
@@ -380,9 +389,9 @@ namespace WebApplication5.DAL
         }
         public int GetNoReceiveStatusOrd()
         {
-            string startDate = "2021-01-01";
-            string endDate = "2021-01-04";
-            string netGuid = "efb05410-ba92-4a73-a37f-f05f9a499ded";
+            string startDate = "'2021-01-01'";
+            string endDate = "'2021-01-04'";
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
             using (IDbConnection connection = dbConnection)
@@ -398,7 +407,8 @@ namespace WebApplication5.DAL
                             WHERE n.Real_Net_Guid = {netGuid}
                             AND p.Actual = 1)
                             and h.date between {startDate} and ({endDate}) and s.status = 100
-                            and h.orderid not in (select orderid from[Documents].[OrderStatuses] where[status] in (200,211,202,201))");
+                            and h.orderid not in (select orderid from[Documents].[OrderStatuses] where[status] in (200,211,202,201))
+                            HAVING COUNT(h.number) > 0");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -417,7 +427,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            result = (Int16)reader[0];
+                            result = (Int32)reader[0];
                         }
                     }
                     else
