@@ -43,9 +43,9 @@ namespace WebApplication5.Models
             _dbRepository = dbRepository;
         }
 
-        public int GetStoresCount()
+        public int GetStoresCount(string a, string b)
         {
-            return _dbRepository.GetStoresCount();
+            return _dbRepository.GetStoresCount(a, b);
         }
 
         public int GetOrderCount()
@@ -53,9 +53,9 @@ namespace WebApplication5.Models
             return _dbRepository.GetOrderCount();
         }
 
-        public int GetNoEndStatus()
+        public int GetNoEndStatus(string a, string b)
         {
-            return _dbRepository.GetNoEndStatus();
+            return _dbRepository.GetNoEndStatus(a, b);
         }
         
         public int GetSoldOrdersCount()

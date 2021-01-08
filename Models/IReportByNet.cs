@@ -7,8 +7,8 @@ namespace WebApplication5.Models
 {
     public interface IReportByNet
     {
-        public int GetStoresCount();
-        public int GetNoEndStatus();
+        public int GetStoresCount(string a, string b);
+        public int GetNoEndStatus(string a, string b);
         public int GetOrderCount();
         public int GetSoldOrdersCount();
         public int GetTimeOutCanceledCount();

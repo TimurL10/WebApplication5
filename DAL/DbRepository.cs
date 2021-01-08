@@ -22,10 +22,8 @@ namespace WebApplication5.DAL
 
         internal IDbConnection dbConnection { get { return new SqlConnection(_configuration); } }
 
-        public int GetNoEndStatus()
+        public int GetNoEndStatus(string startDate, string endDate)
         {
-            string startDate = "'2020-12-01'";
-            string endDate = "'2020-12-27'";
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 
@@ -45,8 +43,6 @@ namespace WebApplication5.DAL
                             and h.orderid not in (select orderid from[Documents].[OrderStatuses] where[status] in (210, 205, 202, 212, 211))
                             HAVING COUNT(h.number) > 0");
 
-
-
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = spName;
@@ -65,6 +61,7 @@ namespace WebApplication5.DAL
                         while (reader.Read())
                         {
                             result = (Int32)reader[0];
+                            Debug.WriteLine(result);
                         }
                     }
                     else
@@ -76,10 +73,8 @@ namespace WebApplication5.DAL
             }
             return result;
         }
-        public int GetStoresCount()
+        public int GetStoresCount(string startDate, string endDate)
         {
-            string startDate = "'2021-01-01'";
-            string endDate = "'2021-01-04'";
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             int result = 0;
 

@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { ReportByNet } from './reportbynet';
 import { HttpParams } from "@angular/common/http";
-import { HttpHeaders } from "@angular/common/http";
 
 
 
