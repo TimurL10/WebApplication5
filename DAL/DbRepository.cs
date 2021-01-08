@@ -101,6 +101,7 @@ namespace WebApplication5.DAL
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = spName;
+                command.CommandTimeout = 200;
                 SqlParameter parameter = new SqlParameter();
                 parameter.ParameterName = "@text";
                 parameter.SqlDbType = SqlDbType.NVarChar;

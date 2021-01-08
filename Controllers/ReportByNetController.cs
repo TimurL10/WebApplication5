@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication5.Models;
@@ -22,7 +23,7 @@ namespace WebApplication5.Controllers
         }
 
         [HttpGet]
-        public ReportByNet Get()
+        public ReportByNet Get(string start, string end)
         {
             ReportByNet report = new ReportByNet(
                 _reportByNet.GetStoresCount(),
@@ -33,6 +34,7 @@ namespace WebApplication5.Controllers
                 _reportByNet.GetNoEndStatus(),
                 _reportByNet.GetCanceledOrdCount(),
                 _reportByNet.GetNoReceiveStatusOrd());
+            Debug.WriteLine( $" ====={report.NoEndStatusOrd} + { report.NoReceiveStatusOrd} + {report.OrdersCount} + {report.SoldOrders} + {report.TimeOutCanceled} + {report.TimeOutCanceled}=====");
             return report;
         }
 
