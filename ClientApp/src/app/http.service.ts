@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { ReportByNet } from './reportbynet';
 import { HttpParams } from "@angular/common/http";
+import { UserSettings } from 'src/app/models/user-settings';
 
 
 
@@ -15,6 +16,12 @@ export class HttpService {
 
   getDataByNet(params: HttpParams) {
     return this.http.get<ReportByNet>('reportbynet', { params });
+  }
+
+  PostGuid(user: UserSettings) {
+    this.logger.debug(user);   
+
+    return this.http.post<UserSettings>('usersettings', user, { observe: 'response' });
   }
 }
 

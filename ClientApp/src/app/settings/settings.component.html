@@ -1,0 +1,10 @@
+<form #userForm="ngForm">
+  <div class="form-group">
+    <label>Гуид Сети</label>
+    <input class="form-control" name="netGuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" [(ngModel)]="user.netGuid" required />
+  </div>
+  <br>
+  <div class="form-group">
+    <button type="button" class="btn btn-default" (click)="PostGuidToDb()">Сохранить</button>
+    </div>
+</form>

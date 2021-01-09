@@ -12,12 +12,14 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NetreportComponent } from './netreport/netreport.component';
+import { SettingsComponent } from './settings/settings.component';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
-
+import { from } from 'rxjs';
+ 
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    NetreportComponent
+    NetreportComponent,
+    SettingsComponent
   ],
   imports: [
     LoggerModule.forRoot({ serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR }),
@@ -42,7 +45,8 @@ import { MatNativeDateModule } from '@angular/material/core';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'reportnet', component: NetreportComponent }
+      { path: 'reportnet', component: NetreportComponent },
+      { path: 'settings', component: SettingsComponent }
     ]),
     BrowserAnimationsModule
   ],
