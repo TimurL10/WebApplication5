@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication5.Models;
 
 namespace WebApplication5.DAL
 {
@@ -15,6 +16,11 @@ namespace WebApplication5.DAL
         public int CustomerCanceledOrdersCount();
         public int GetCanceledOrdCount();
         public int GetNoReceiveStatusOrd();
+        public void PostNetSettings(UserSettings userSettings);
+        public List<Tuple<string, string>> GetStoreNames();
+        public List<Tuple<int, string>> GetEachStoreOrdersCount();
+        public List<Tuple<int, string>> GetEachStoreCancelOrdersCount();
+
 
 
     }

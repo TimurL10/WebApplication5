@@ -10,6 +10,8 @@ namespace WebApplication5.Models
     public class ReportByNet : IReportByNet
     {
         private IDbRepository _dbRepository;
+        public string StoreName { get; set; }
+
         public int StoresCount { get; set; }
 
         public int OrdersCount { get; set; }
@@ -28,6 +30,19 @@ namespace WebApplication5.Models
 
         public ReportByNet(int storesCount, int ordersCount, int soldOrders, int timeOutCanceled, int customerCanceledOrders, int noEndStatusOrd, int canceledOrd, int noReceiveStatusOrd)
         {
+            StoresCount = storesCount;
+            OrdersCount = ordersCount;
+            SoldOrders = soldOrders;
+            TimeOutCanceled = timeOutCanceled;
+            CustomerCanceledOrders = customerCanceledOrders;
+            NoEndStatusOrd = noEndStatusOrd;
+            CanceledOrd = canceledOrd;
+            NoReceiveStatusOrd = noReceiveStatusOrd;
+        }
+
+        public ReportByNet(string storeName, int storesCount, int ordersCount, int soldOrders, int timeOutCanceled, int customerCanceledOrders, int noEndStatusOrd, int canceledOrd, int noReceiveStatusOrd)
+        {
+            StoreName = storeName;
             StoresCount = storesCount;
             OrdersCount = ordersCount;
             SoldOrders = soldOrders;
@@ -81,6 +96,19 @@ namespace WebApplication5.Models
         public int GetNoReceiveStatusOrd()
         {
             return _dbRepository.GetNoReceiveStatusOrd();
+        }
+
+        public List<Tuple<string, string>> GetStoreNames()
+        {
+            return _dbRepository.GetStoreNames();
+        }
+        public List<Tuple<int, string>> GetEachStoreOrdersCount()
+        {
+            return _dbRepository.GetEachStoreOrdersCount();
+        }
+        public List<Tuple<int, string>> GetEachStoreCancelOrdersCount()
+        {
+            return _dbRepository.GetEachStoreCancelOrdersCount();
         }
 
 

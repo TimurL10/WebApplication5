@@ -1,0 +1,64 @@
+<!--<p *ngIf="!report"><em>Loading...</em></p>-->
+
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Enter a date range</mat-label>
+    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+      <input matStartDate formControlName="start" placeholder="Start date">
+      <input matEndDate formControlName="end" placeholder="End date">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+  </mat-form-field>
+</div>
+
+<button class="btn btn-primary"
+        type="button"
+        (click)="loadReport()">
+  Создать Отчет
+</button>
+
+<!--<div class="table-responsive" *ngIf="report">
+  <table class="table table-sm table-bordered">
+    <thead>
+      <tr>
+        <td>Кол-во аптек</td>
+        <td>Общее кол-во заказов</td>
+        <td>Кол-во выкупленных заказов</td>
+        <td>Доля выкупленных заказов %</td>
+        <td>Заказы отмененные аптекой</td>
+        <td>Доля заказов отмененных аптекой %</td>
+        <td>Заказы без конечного статуса</td>
+        <td>Доля заказов без конечного статуса %</td>
+        <td>Не принятые заказы</td>
+        <td>Доля не принятых заказов %</td>
+        <td>Отмененные клиентом</td>
+        <td>Доля Отмененные клиентом %</td>
+        <td>Истечение срока резерва</td>
+        <td>Доля Истечение срока резерва %</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span>{{report?.storesCount}}</span></td>
+        <td>{{report?.ordersCount}}</td>
+        <td><span>{{report?.soldOrders}}</span></td>
+        <td *ngIf="report.soldOrders">{{makeFloor((report?.soldOrders/report?.ordersCount)*100)}}</td>
+        <td>{{report?.canceledOrd}}</td>
+        <td *ngIf="report.canceledOrd">{{makeFloor((report?.canceledOrd/report?.ordersCount)*100)}}</td>
+        <td>{{report?.noEndStatusOrd}}</td>
+        <td *ngIf="report.noEndStatusOrd">{{makeFloor((report?.noEndStatusOrd/report?.ordersCount)*100)}}</td>
+        <td>{{report?.noReceiveStatusOrd}}</td>
+        <td *ngIf="report.noReceiveStatusOrd">{{makeFloor((report?.noReceiveStatusOrd/report?.ordersCount)*100)}}</td>
+        <td>{{report?.customerCanceledOrders}}</td>
+        <td *ngIf="report?.customerCanceledOrders">{{makeFloor((report?.customerCanceledOrders/report?.ordersCount)*100)}}</td>
+        <td>{{report?.timeOutCanceled}}</td>
+        <td *ngIf="report.timeOutCanceled">{{makeFloor((report?.timeOutCanceled/report?.ordersCount)*100)}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>-->
+
+

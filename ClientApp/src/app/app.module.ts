@@ -13,6 +13,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NetreportComponent } from './netreport/netreport.component';
 import { SettingsComponent } from './settings/settings.component';
+import { StoreReportComponent } from './store-report/store-report.component';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,7 +31,9 @@ import { from } from 'rxjs';
     CounterComponent,
     FetchDataComponent,
     NetreportComponent,
-    SettingsComponent
+    SettingsComponent,
+    StoreReportComponent
+
   ],
   imports: [
     LoggerModule.forRoot({ serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR }),
@@ -46,7 +49,8 @@ import { from } from 'rxjs';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'reportnet', component: NetreportComponent },
-      { path: 'settings', component: SettingsComponent }
+      { path: 'settings', component: SettingsComponent },
+      { path: 'GetReportForStores', component: StoreReportComponent }
     ]),
     BrowserAnimationsModule
   ],

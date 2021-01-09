@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication5.DAL;
 using WebApplication5.Models;
 
 namespace WebApplication5.Controllers
@@ -12,6 +13,12 @@ namespace WebApplication5.Controllers
     [Route("[controller]")]
     public class UserSettingsController : Controller
     {
+        private IDbRepository _dbRepository;
+
+        public UserSettingsController(IDbRepository dbRepository)
+        {
+            _dbRepository = dbRepository;
+        }
         public IActionResult Index()
         {
             return View();
@@ -22,6 +29,7 @@ namespace WebApplication5.Controllers
         {
             if (ModelState.IsValid)
             {
+                _dbRepository.PostNetSettings(userSettings);
                 return Ok(userSettings);
             }
 

@@ -10,7 +10,7 @@ using WebApplication5.Models;
 namespace WebApplication5.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class ReportByNetController : Controller
     {
         private IReportByNet _reportByNet;
@@ -60,6 +60,22 @@ namespace WebApplication5.Controllers
             }
             return null;
         }
+
+        [HttpGet]
+        public void GetReportForStores(string start, string end)
+        {
+            start = InsertQuotes(ParseDate(start));
+            end = InsertQuotes(ParseDate(end));
+            var tupleList = _reportByNet.GetStoreNames();
+            var orders = _reportByNet.GetEachStoreOrdersCount();
+            var canceledOrders = _reportByNet.GetEachStoreCancelOrdersCount();
+
+
+        }
+
+
+
+
 
     }
 }

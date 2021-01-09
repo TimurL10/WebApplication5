@@ -5,15 +5,13 @@ import { NGXLogger } from 'ngx-logger';
 import { ReportByNet } from 'src/app/reportbynet';
 import { FormGroup, FormControl } from '@angular/forms';
 import { HttpParams } from "@angular/common/http";
-import { NativeDateAdapter, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-import { formatDate } from '@angular/common';
 
 
 @Component({
     selector: 'app-netreport',
     templateUrl: './netreport.component.html',
     styleUrls: ['./netreport.component.css'],
-  providers: [HttpService]
+    providers: [HttpService]
 })
 
 
@@ -29,8 +27,6 @@ export class NetreportComponent {
   params: HttpParams;
   
   report: ReportByNet;
-
-  @Inject('BASE_URL') baseUrl: string;
 
   constructor(private httpService: HttpService, http: HttpClient, private logger: NGXLogger) {
   }

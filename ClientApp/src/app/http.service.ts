@@ -19,10 +19,15 @@ export class HttpService {
   }
 
   PostGuid(user: UserSettings) {
-    this.logger.debug(user);   
-
-    return this.http.post<UserSettings>('usersettings', user, { observe: 'response' });
+    return this.http.post<UserSettings>('usersettings/get', user, { observe: 'response' });
   }
+
+  GetReportForStores(params: HttpParams) {
+    this.logger.debug(params);
+    return this.http.get<ReportByNet>('reportbynet/getreportforstores', { params });
+  }
+
+
 }
 
 
