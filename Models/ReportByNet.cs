@@ -98,7 +98,7 @@ namespace WebApplication5.Models
             return _dbRepository.GetNoReceiveStatusOrd();
         }
 
-        public List<Tuple<string, string>> GetStoreNames()
+        public List<MarketNames> GetStoreNames()
         {
             return _dbRepository.GetStoreNames();
         }

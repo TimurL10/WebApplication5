@@ -69,8 +69,6 @@ namespace WebApplication5.Controllers
             var tupleList = _reportByNet.GetStoreNames();
             var orders = _reportByNet.GetEachStoreOrdersCount();
             var canceledOrders = _reportByNet.GetEachStoreCancelOrdersCount();
-
-
         }
 
 

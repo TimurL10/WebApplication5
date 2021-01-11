@@ -17,14 +17,18 @@ namespace WebApplication5.DAL
     {
         private string _configuration;
         private string _userConfiguration;
+        private string _shardConfiguration;
         public DbRepository(IConfiguration configuration)
         {
            _configuration = configuration.GetValue<string>("DbInfo:ConnectionString");
            _userConfiguration = configuration.GetValue<string>("DbInfo:ConnectionStringUser");
+            _shardConfiguration = configuration.GetValue<string>("DbInfo:ConnectionStringShard");
         }
 
         internal IDbConnection dbConnection { get { return new SqlConnection(_configuration); } }
         internal IDbConnection dbConnectionUser { get { return new SqlConnection(_userConfiguration); } }
+
+        internal IDbConnection dbConnectionShard { get { return new SqlConnection(_shardConfiguration); } }
 
         public int GetNoEndStatus(string startDate, string endDate)
         {
@@ -447,18 +451,46 @@ namespace WebApplication5.DAL
             } 
         }
 
-        public List<Tuple<string, string>> GetStoreNames()
+        public List<MarketNames> GetStoreNames()
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
-            List<Tuple<string, string>> storesTuple = new List<Tuple<string, string>>();
-
-            using (IDbConnection connection = dbConnection)
+            List<MarketNames> marketNames = new List<MarketNames>();
+            using (IDbConnection connection = dbConnectionShard)
             {
+                string SqlCommand = ($@"SELECT p.TableRowGUID, NameFull 
+                                        FROM[References].PN_PharmacySync p
+                                        JOIN[References].[UnionNetSync] n ON n.id = p.id_pn_unionnet
+                                        WHERE n.Real_Net_Guid = 'efb05410-ba92-4a73-a37f-f05f9a499ded'
+                                        AND p.Actual = 1");
+
+
+                SqlCommand command = new SqlCommand(SqlCommand, (SqlConnection)connection);
+                command.CommandType = CommandType.Text;
+                SqlParameter parameter = new SqlParameter();
+                parameter.SqlDbType = SqlDbType.NVarChar;
+                parameter.Direction = ParameterDirection.Input;
                 connection.Open();
-                return connection.Query<List<Tuple<string, string>>>($"SELECT [TableRowGUID], NameFull FROM[References].PN_PharmacySync JOIN[References].[UnionNetSync] n ON n.id = p.id_pn_unionnet WHERE n.Real_Net_Guid = { netGuid} AND p.Actual = 1").FirstOrDefault();
-                connection.Close();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var market = new MarketNames((String)reader[0], (String)reader[1]);
+                            marketNames.Add(market);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No rows found.");
+                    }
+                    reader.Close();
+                }
             }
+            return marketNames;
         }
+        
 
         public List<Tuple<int, string>> GetEachStoreOrdersCount()
         {

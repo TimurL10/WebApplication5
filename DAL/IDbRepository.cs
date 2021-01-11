@@ -17,7 +17,7 @@ namespace WebApplication5.DAL
         public int GetCanceledOrdCount();
         public int GetNoReceiveStatusOrd();
         public void PostNetSettings(UserSettings userSettings);
-        public List<Tuple<string, string>> GetStoreNames();
+        public List<MarketNames> GetStoreNames();
         public List<Tuple<int, string>> GetEachStoreOrdersCount();
         public List<Tuple<int, string>> GetEachStoreCancelOrdersCount();
 
