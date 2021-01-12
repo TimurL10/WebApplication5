@@ -102,11 +102,11 @@ namespace WebApplication5.Models
         {
             return _dbRepository.GetStoreNames();
         }
-        public List<Tuple<int, string>> GetEachStoreOrdersCount()
+        public List<MarketNames> GetEachStoreOrdersCount()
         {
             return _dbRepository.GetEachStoreOrdersCount();
         }
-        public List<Tuple<int, string>> GetEachStoreCancelOrdersCount()
+        public List<MarketNames> GetEachStoreCancelOrdersCount()
         {
             return _dbRepository.GetEachStoreCancelOrdersCount();
         }

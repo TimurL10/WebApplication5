@@ -460,7 +460,7 @@ namespace WebApplication5.DAL
                 string SqlCommand = ($@"SELECT p.TableRowGUID, NameFull 
                                         FROM[References].PN_PharmacySync p
                                         JOIN[References].[UnionNetSync] n ON n.id = p.id_pn_unionnet
-                                        WHERE n.Real_Net_Guid = 'efb05410-ba92-4a73-a37f-f05f9a499ded'
+                                        WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1");
 
 
@@ -477,7 +477,7 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            var market = new MarketNames((String)reader[0], (String)reader[1]);
+                            var market = new MarketNames((Guid)reader[0], (String)reader[1]);
                             marketNames.Add(market);
                         }
                     }
@@ -486,17 +486,17 @@ namespace WebApplication5.DAL
                         Console.WriteLine("No rows found.");
                     }
                     reader.Close();
+                    connection.Close();
                 }
             }
             return marketNames;
         }
         
 
-        public List<Tuple<int, string>> GetEachStoreOrdersCount()
+        public List<MarketNames> GetEachStoreOrdersCount()
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
-            List<Tuple<int, string>> storesTuple = new List<Tuple<int, string>>();
-
+            List<MarketNames> marketNames = new List<MarketNames>();
             using (IDbConnection connection = dbConnection)
             {
                 string spName = "[Monitoring].[ExecQueryShards]";
@@ -529,7 +529,8 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            storesTuple.Add(new Tuple<int, string>((Int32)reader[0], (String)reader[1]));
+                            var market = new MarketNames((Int32)reader[0], (String)reader[1]);
+                            marketNames.Add(market);
                         }
                     }
                     else
@@ -537,15 +538,16 @@ namespace WebApplication5.DAL
                         Console.WriteLine("No rows found.");
                     }
                     reader.Close();
+                    connection.Close();
                 }
             }
-            return storesTuple;
+            return marketNames;
         }
 
-        public List<Tuple<int, string>> GetEachStoreCancelOrdersCount()
+        public List<MarketNames> GetEachStoreCancelOrdersCount()
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
-            List<Tuple<int, string>> storesTuple = new List<Tuple<int, string>>();
+            List<MarketNames> MarketNames = new List<MarketNames>();
 
             using (IDbConnection connection = dbConnection)
             {
@@ -581,7 +583,9 @@ namespace WebApplication5.DAL
                     {
                         while (reader.Read())
                         {
-                            storesTuple.Add(new Tuple<int, string>((Int32)reader[0], (String)reader[1]));
+                            var market = new MarketNames((Int32)reader[0], (Guid)reader[1]);
+                            MarketNames.Add(market);
+
                         }
                     }
                     else
@@ -591,7 +595,7 @@ namespace WebApplication5.DAL
                     reader.Close();
                 }
             }
-            return storesTuple;
+            return MarketNames;
         }
 
     }

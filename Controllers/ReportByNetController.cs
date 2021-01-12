@@ -66,13 +66,23 @@ namespace WebApplication5.Controllers
         {
             start = InsertQuotes(ParseDate(start));
             end = InsertQuotes(ParseDate(end));
-            var tupleList = _reportByNet.GetStoreNames();
+            var stores = _reportByNet.GetStoreNames();
             var orders = _reportByNet.GetEachStoreOrdersCount();
+            var canceledOrderd = _reportByNet.GetEachStoreCancelOrdersCount();
+
+            //var p = tupleList.GroupJoin(tupleList, orders.Where(orders => orders.NameFull == ""));
+
+            var result = (from t in stores
+                          join o in orders on t.NameFull equals o.NameFull
+                          join c in canceledOrderd on t.TableRowGUID equals c.TableRowGUID
+                         select new { NameFull = t.NameFull, OrdersCount = o.Count, CanceledOrders = c.Count });
+
+
             var canceledOrders = _reportByNet.GetEachStoreCancelOrdersCount();
         }
 
 
-
+        
 
 
     }

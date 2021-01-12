@@ -16,7 +16,7 @@ namespace WebApplication5.Models
         public int GetCanceledOrdCount();
         public int GetNoReceiveStatusOrd();
         public List<MarketNames> GetStoreNames();
-        public List<Tuple<int, string>> GetEachStoreOrdersCount();
-        public List<Tuple<int, string>> GetEachStoreCancelOrdersCount();
+        public List<MarketNames> GetEachStoreOrdersCount();
+        public List<MarketNames> GetEachStoreCancelOrdersCount();
     }
 }
