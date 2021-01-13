@@ -132,7 +132,7 @@ namespace WebApplication5.DAL
             }
             return result;            
         }
-        public int GetOrderCount()
+        public int GetOrderCount(string start, string end)
         {
             string startDate = "'2021-01-01'";
             string endDate = "'2021-01-04'";
@@ -183,7 +183,7 @@ namespace WebApplication5.DAL
             }
             return result;
         }
-        public int GetSoldOrdersCount()
+        public int GetSoldOrdersCount(string start, string end)
         {
             string startDate = "'2021-01-01'";
             string endDate = "'2021-01-04'";
@@ -235,7 +235,7 @@ namespace WebApplication5.DAL
             }
             return result;
         }
-        public int GetTimeOutCanceledCount()
+        public int GetTimeOutCanceledCount(string start, string end)
         {
             string startDate = "'2021-01-01'";
             string endDate = "'2021-01-04'";
@@ -287,7 +287,7 @@ namespace WebApplication5.DAL
             }
             return result;
         }
-        public int CustomerCanceledOrdersCount()
+        public int CustomerCanceledOrdersCount(string start, string end)
         {
             string startDate = "'2021-01-01'";
             string endDate = "'2021-01-04'";
@@ -339,7 +339,7 @@ namespace WebApplication5.DAL
             }
             return result;
         }
-        public int GetCanceledOrdCount()
+        public int GetCanceledOrdCount(string start, string end)
         {
             string startDate = "'2021-01-01'";
             string endDate = "'2021-01-04'";
@@ -391,7 +391,7 @@ namespace WebApplication5.DAL
             }
             return result;
         }
-        public int GetNoReceiveStatusOrd()
+        public int GetNoReceiveStatusOrd(string start, string end)
         {
             string startDate = "'2021-01-01'";
             string endDate = "'2021-01-04'";
@@ -493,7 +493,7 @@ namespace WebApplication5.DAL
         }
         
 
-        public List<MarketNames> GetEachStoreOrdersCount()
+        public List<MarketNames> GetEachStoreOrdersCount(string start, string end)
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             List<MarketNames> marketNames = new List<MarketNames>();
@@ -544,7 +544,7 @@ namespace WebApplication5.DAL
             return marketNames;
         }
 
-        public List<MarketNames> GetEachStoreCancelOrdersCount()
+        public List<MarketNames> GetEachStoreCancelOrdersCount(string start, string end)
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
             List<MarketNames> MarketNames = new List<MarketNames>();
@@ -596,6 +596,272 @@ namespace WebApplication5.DAL
                 }
             }
             return MarketNames;
+        }
+
+        public List<MarketNames> GetEachStoreSoldOrdersCount(string start, string end)
+        {
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
+            List<MarketNames> MarketNames = new List<MarketNames>();
+
+            using (IDbConnection connection = dbConnection)
+            {
+                string spName = "[Monitoring].[ExecQueryShards]";
+                string sqlCommand = ($@"select COUNT(h.number), h.StoreId
+                                        from [Documents].[OrderHeaders] h
+                                        inner join [Documents].[OrderStatuses] s on h.orderid = s.orderid
+                                        where h.storeid in 
+                                        (SELECT [TableRowGUID]
+                                        FROM [References].PN_PharmacySync p 
+                                        JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
+                                        WHERE n.Real_Net_Guid = {netGuid}
+                                        AND p.Actual = 1)
+
+                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (210) )
+                                        GROUP BY h.StoreId");
+
+                SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = spName;
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = "@text";
+                parameter.SqlDbType = SqlDbType.NVarChar;
+                parameter.Direction = ParameterDirection.Input;
+                parameter.Value = sqlCommand;
+                command.Parameters.AddWithValue("@text", sqlCommand);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var market = new MarketNames((Int32)reader[0], (Guid)reader[1]);
+                            MarketNames.Add(market);
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No rows found.");
+                    }
+                    reader.Close();
+                }
+            }
+            return MarketNames;
+        }
+
+        public List<MarketNames> GetEachStoreNoEndStatus(string start, string end)
+        {
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
+            List<MarketNames> MarketNames = new List<MarketNames>();
+
+            using (IDbConnection connection = dbConnection)
+            {
+                string spName = "[Monitoring].[ExecQueryShards]";
+                string sqlCommand = ($@"select COUNT(h.number), h.StoreId
+                                        from [Documents].[OrderHeaders] h
+                                        inner join [Documents].[OrderStatuses] s on h.orderid = s.orderid
+                                        where h.storeid in 
+                                        (SELECT [TableRowGUID]
+                                        FROM [References].PN_PharmacySync p 
+                                        JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
+                                        WHERE n.Real_Net_Guid = {netGuid}
+                                        AND p.Actual = 1)
+
+                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.orderid not in (select orderid from [Documents].[OrderStatuses] where [status] in (202,212,205,211,210) )
+                                        GROUP BY h.StoreId");
+
+                SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = spName;
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = "@text";
+                parameter.SqlDbType = SqlDbType.NVarChar;
+                parameter.Direction = ParameterDirection.Input;
+                parameter.Value = sqlCommand;
+                command.Parameters.AddWithValue("@text", sqlCommand);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var market = new MarketNames((Int32)reader[0], (Guid)reader[1]);
+                            MarketNames.Add(market);
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No rows found.");
+                    }
+                    reader.Close();
+                }
+            }
+            return MarketNames;
+        }
+        public List<MarketNames> GetEachStoreTimeOutCanceledCount(string start, string end)
+        {
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
+            List<MarketNames> MarketNames = new List<MarketNames>();
+
+            using (IDbConnection connection = dbConnection)
+            {
+                string spName = "[Monitoring].[ExecQueryShards]";
+                string sqlCommand = ($@"select COUNT(h.number), h.StoreId
+                                        from [Documents].[OrderHeaders] h
+                                        inner join [Documents].[OrderStatuses] s on h.orderid = s.orderid
+                                        where h.storeid in 
+                                        (SELECT [TableRowGUID]
+                                        FROM [References].PN_PharmacySync p 
+                                        JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
+                                        WHERE n.Real_Net_Guid = {netGuid}
+                                        AND p.Actual = 1)
+
+                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (205) )
+                                        GROUP BY h.StoreId");
+
+                SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = spName;
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = "@text";
+                parameter.SqlDbType = SqlDbType.NVarChar;
+                parameter.Direction = ParameterDirection.Input;
+                parameter.Value = sqlCommand;
+                command.Parameters.AddWithValue("@text", sqlCommand);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var market = new MarketNames((Int32)reader[0], (Guid)reader[1]);
+                            MarketNames.Add(market);
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No rows found.");
+                    }
+                    reader.Close();
+                }
+            }
+            return MarketNames;
+        }
+        public List<MarketNames> CustomerGetEachStoreCanceledOrdersCount(string start, string end)
+        {
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
+            List<MarketNames> MarketNames = new List<MarketNames>();
+
+            using (IDbConnection connection = dbConnection)
+            {
+                string spName = "[Monitoring].[ExecQueryShards]";
+                string sqlCommand = ($@"select COUNT(h.number), h.StoreId
+                                        from [Documents].[OrderHeaders] h
+                                        inner join [Documents].[OrderStatuses] s on h.orderid = s.orderid
+                                        where h.storeid in 
+                                        (SELECT [TableRowGUID]
+                                        FROM [References].PN_PharmacySync p 
+                                        JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
+                                        WHERE n.Real_Net_Guid = {netGuid}
+                                        AND p.Actual = 1)
+
+                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (211) )
+                                        GROUP BY h.StoreId");
+
+                SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = spName;
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = "@text";
+                parameter.SqlDbType = SqlDbType.NVarChar;
+                parameter.Direction = ParameterDirection.Input;
+                parameter.Value = sqlCommand;
+                command.Parameters.AddWithValue("@text", sqlCommand);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var market = new MarketNames((Int32)reader[0], (Guid)reader[1]);
+                            MarketNames.Add(market);
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No rows found.");
+                    }
+                    reader.Close();
+                }
+            }
+            return MarketNames;
+        }
+        public List<MarketNames> GetEachStoreNoReceiveStatusOrd(string start, string end)
+        {
+            string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
+            List<MarketNames> MarketNames = new List<MarketNames>();
+
+            using (IDbConnection connection = dbConnection)
+            {
+                string spName = "[Monitoring].[ExecQueryShards]";
+                string sqlCommand = ($@"select COUNT(h.number), h.StoreId
+                                        from [Documents].[OrderHeaders] h
+                                        inner join [Documents].[OrderStatuses] s on h.orderid = s.orderid
+                                        where h.storeid in 
+                                        (SELECT [TableRowGUID]
+                                        FROM [References].PN_PharmacySync p 
+                                        JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
+                                        WHERE n.Real_Net_Guid = {netGuid}
+                                        AND p.Actual = 1)
+                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (200,201,202,211) )
+                                        GROUP BY h.StoreId");
+
+                SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = spName;
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = "@text";
+                parameter.SqlDbType = SqlDbType.NVarChar;
+                parameter.Direction = ParameterDirection.Input;
+                parameter.Value = sqlCommand;
+                command.Parameters.AddWithValue("@text", sqlCommand);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var market = new MarketNames((Int32)reader[0], (Guid)reader[1]);
+                            MarketNames.Add(market);
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No rows found.");
+                    }
+                    reader.Close();
+                }
+            }
+            return MarketNames;        
         }
 
     }

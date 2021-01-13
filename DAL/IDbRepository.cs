@@ -10,16 +10,22 @@ namespace WebApplication5.DAL
     {
         public int GetNoEndStatus(string a, string b);
         public int GetStoresCount(string a, string b);
-        public int GetOrderCount();
-        public int GetSoldOrdersCount();
-        public int GetTimeOutCanceledCount();
-        public int CustomerCanceledOrdersCount();
-        public int GetCanceledOrdCount();
-        public int GetNoReceiveStatusOrd();
+        public int GetOrderCount(string a, string b);
+        public int GetSoldOrdersCount(string a, string b);
+        public int GetTimeOutCanceledCount(string a, string b);
+        public int CustomerCanceledOrdersCount(string a, string b);
+        public int GetCanceledOrdCount(string a, string b);
+        public int GetNoReceiveStatusOrd(string a, string b);
         public void PostNetSettings(UserSettings userSettings);
         public List<MarketNames> GetStoreNames();
-        public List<MarketNames> GetEachStoreOrdersCount();
-        public List<MarketNames> GetEachStoreCancelOrdersCount();
+        public List<MarketNames> GetEachStoreOrdersCount(string a, string b);
+        public List<MarketNames> GetEachStoreCancelOrdersCount(string a, string b);
+        public List<MarketNames> GetEachStoreSoldOrdersCount(string a, string b);
+        public List<MarketNames> GetEachStoreNoEndStatus(string a, string b);
+        public List<MarketNames> GetEachStoreTimeOutCanceledCount(string a, string b);
+        public List<MarketNames> CustomerGetEachStoreCanceledOrdersCount(string a, string b);
+        public List<MarketNames> GetEachStoreNoReceiveStatusOrd(string a, string b);
+
 
 
 

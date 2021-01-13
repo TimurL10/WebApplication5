@@ -30,7 +30,6 @@ namespace WebApplication5
             });
 
             services.AddScoped<IDbRepository, DbRepository>();
-            services.AddScoped<IReportByNet, ReportByNet>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
