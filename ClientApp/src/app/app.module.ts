@@ -14,13 +14,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NetreportComponent } from './netreport/netreport.component';
 import { SettingsComponent } from './settings/settings.component';
 import { StoreReportComponent } from './store-report/store-report.component';
+import { MatSortModule } from '@angular/material/sort'; 
+
+
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
-import { from } from 'rxjs';
- 
+import { MatTableModule } from '@angular/material/table';
 
 
 @NgModule({
@@ -33,7 +35,6 @@ import { from } from 'rxjs';
     NetreportComponent,
     SettingsComponent,
     StoreReportComponent
-
   ],
   imports: [
     LoggerModule.forRoot({ serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR }),
@@ -44,6 +45,8 @@ import { from } from 'rxjs';
     ReactiveFormsModule,
     MatNativeDateModule,
     FormsModule,
+    MatTableModule,
+    MatSortModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },

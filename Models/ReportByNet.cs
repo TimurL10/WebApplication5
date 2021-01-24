@@ -29,6 +29,7 @@ namespace WebApplication5.Models
 
         public ReportByNet(int storesCount, int ordersCount, int soldOrders, int timeOutCanceled, int customerCanceledOrders, int noEndStatusOrd, int canceledOrd, int noReceiveStatusOrd)
         {
+            StoreName = String.Empty;
             StoresCount = storesCount;
             OrdersCount = ordersCount;
             SoldOrders = soldOrders;

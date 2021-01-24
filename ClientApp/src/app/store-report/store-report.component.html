@@ -12,53 +12,61 @@
     <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
     <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
   </mat-form-field>
+  <button class="mat-raised-button"
+          type="button"
+          (click)="loadReport()">
+    Создать Отчет
+  </button>
+
 </div>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" *ngIf="report">
 
-<button class="btn btn-primary"
-        type="button"
-        (click)="loadReport()">
-  Создать Отчет
-</button>
+  <!-- Position Column -->
+  <ng-container matColumnDef="storeName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Аптека </th>
+    <td mat-cell *matCellDef="let element"> {{element.storeName}} </td>
+  </ng-container>
 
-<!--<div class="table-responsive" *ngIf="report">
-  <table class="table table-sm table-bordered">
-    <thead>
-      <tr>
-        <td>Кол-во аптек</td>
-        <td>Общее кол-во заказов</td>
-        <td>Кол-во выкупленных заказов</td>
-        <td>Доля выкупленных заказов %</td>
-        <td>Заказы отмененные аптекой</td>
-        <td>Доля заказов отмененных аптекой %</td>
-        <td>Заказы без конечного статуса</td>
-        <td>Доля заказов без конечного статуса %</td>
-        <td>Не принятые заказы</td>
-        <td>Доля не принятых заказов %</td>
-        <td>Отмененные клиентом</td>
-        <td>Доля Отмененные клиентом %</td>
-        <td>Истечение срока резерва</td>
-        <td>Доля Истечение срока резерва %</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span>{{report?.storesCount}}</span></td>
-        <td>{{report?.ordersCount}}</td>
-        <td><span>{{report?.soldOrders}}</span></td>
-        <td *ngIf="report.soldOrders">{{makeFloor((report?.soldOrders/report?.ordersCount)*100)}}</td>
-        <td>{{report?.canceledOrd}}</td>
-        <td *ngIf="report.canceledOrd">{{makeFloor((report?.canceledOrd/report?.ordersCount)*100)}}</td>
-        <td>{{report?.noEndStatusOrd}}</td>
-        <td *ngIf="report.noEndStatusOrd">{{makeFloor((report?.noEndStatusOrd/report?.ordersCount)*100)}}</td>
-        <td>{{report?.noReceiveStatusOrd}}</td>
-        <td *ngIf="report.noReceiveStatusOrd">{{makeFloor((report?.noReceiveStatusOrd/report?.ordersCount)*100)}}</td>
-        <td>{{report?.customerCanceledOrders}}</td>
-        <td *ngIf="report?.customerCanceledOrders">{{makeFloor((report?.customerCanceledOrders/report?.ordersCount)*100)}}</td>
-        <td>{{report?.timeOutCanceled}}</td>
-        <td *ngIf="report.timeOutCanceled">{{makeFloor((report?.timeOutCanceled/report?.ordersCount)*100)}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>-->
+  <!-- Weight Column -->
+  <ng-container matColumnDef="ordersCount">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Кол-во заказов </th>
+    <td mat-cell *matCellDef="let element"> {{element.ordersCount}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="soldOrders">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Кол-во проданных заказов </th>
+    <td mat-cell *matCellDef="let element"> {{element.soldOrders}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="timeOutCanceled">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Сброс резерва </th>
+    <td mat-cell *matCellDef="let element"> {{element.timeOutCanceled}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="customerCanceledOrders">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Отмененные клиентом </th>
+    <td mat-cell *matCellDef="let element"> {{element.customerCanceledOrders}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="noEndStatusOrd">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Зависшие </th>
+    <td mat-cell *matCellDef="let element"> {{element.noEndStatusOrd}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="canceledOrd">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Отмененные </th>
+    <td mat-cell *matCellDef="let element"> {{element.canceledOrd}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="noReceiveStatusOrd">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Не принятые </th>
+    <td mat-cell *matCellDef="let element"> {{element.noReceiveStatusOrd}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
 
 

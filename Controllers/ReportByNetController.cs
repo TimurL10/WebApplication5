@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication5.DAL;
 using WebApplication5.Models;
+using System.Collections;
 
 namespace WebApplication5.Controllers
 {
@@ -27,8 +28,9 @@ namespace WebApplication5.Controllers
         [HttpGet]
         public ReportByNet Get(string start, string end)
         {
-            start = InsertQuotes(ParseDate(start));
-            end = InsertQuotes(ParseDate(end));
+            
+                start = InsertQuotes(ParseDate(start));
+                end = InsertQuotes(ParseDate(end));
 
             ReportByNet report = new ReportByNet(
                 _dbRepository.GetStoresCount(start, end),
@@ -39,7 +41,6 @@ namespace WebApplication5.Controllers
                 _dbRepository.GetNoEndStatus(start, end),
                 _dbRepository.GetCanceledOrdCount(start, end),
                 _dbRepository.GetNoReceiveStatusOrd(start, end));
-            Debug.WriteLine( $" ====={report.NoEndStatusOrd} + { report.NoReceiveStatusOrd} + {report.OrdersCount} + {report.SoldOrders} + {report.TimeOutCanceled} + {report.TimeOutCanceled}=====");
             return report;
         }
 
@@ -65,6 +66,11 @@ namespace WebApplication5.Controllers
         [HttpGet]
         public List<ReportByNet> GetReportForStores(string start, string end)
         {
+
+                //start = "Fri Jan 01 2021 00:00:00 GMT 0300(Москва, стандартное время)";
+                //end = "Fri Jan 08 2021 00:00:00 GMT 0300(Москва, стандартное время)";
+            
+            
             List<ReportByNet> reportByNets = new List<ReportByNet>();
             start = InsertQuotes(ParseDate(start));
             end = InsertQuotes(ParseDate(end));
@@ -79,35 +85,40 @@ namespace WebApplication5.Controllers
 
 
             var result = (from t in stores
-                          join o in orders on t.NameFull equals o.NameFull
-                          join c in canceledOrderd on t.TableRowGUID equals c.TableRowGUID
-                          join s in soldOrders on t.TableRowGUID equals s.TableRowGUID
-                          join n in noEndStatus on t.TableRowGUID equals n.TableRowGUID
-                          join ti in timeoutCanceledOrders on t.TableRowGUID equals ti.TableRowGUID
-                          join cu in customerCancelesOrders on t.TableRowGUID equals cu.TableRowGUID
-                          join no in noReceiveStatusOrd on t.TableRowGUID equals no.TableRowGUID
+                          join o in orders on t.NameFull equals o.NameFull into one
+                          from suborders in one.DefaultIfEmpty()
+                          join c in canceledOrderd on t.TableRowGUID equals c.TableRowGUID into two
+                          from subcancaledorder in two.DefaultIfEmpty()
+                          join s in soldOrders on t.TableRowGUID equals s.TableRowGUID into three
+                          from subsoldorders in three.DefaultIfEmpty()
+                          join n in noEndStatus on t.TableRowGUID equals n.TableRowGUID into four
+                          from subnoendstatuses in four.DefaultIfEmpty()
+                          join ti in timeoutCanceledOrders on t.TableRowGUID equals ti.TableRowGUID into five
+                          from subtimeoutcanceledord in five.DefaultIfEmpty()
+                          join cu in customerCancelesOrders on t.TableRowGUID equals cu.TableRowGUID into six
+                          from subcuscanceledord in six.DefaultIfEmpty()
+                          join no in noReceiveStatusOrd on t.TableRowGUID equals no.TableRowGUID into seven
+                          from subnoreseivestord in seven.DefaultIfEmpty()
                           select new
                           {
-                              NameFull = t.NameFull,
-                              OrdersCount = o.Count,
-                              CanceledOrders = c.Count,
-                              SoldOrders = s.Count,
-                              NoEndStatus = n.Count,
-                              TimeOutCanceledOrders = ti.Count,
-                              CusCanceledOrd = cu.Count,
-                              noRecieveOrdStatus = no.Count
-                          });
+                              NameFull = t?.NameFull ?? String.Empty,
+                              OrdersCount = suborders?.Count ?? 0,
+                              CanceledOrders = subcancaledorder?.Count ?? 0,
+                              SoldOrders = subsoldorders?.Count ?? 0,
+                              NoEndStatus = subnoendstatuses?.Count ?? 0,
+                              TimeOutCanceledOrders = subtimeoutcanceledord?.Count ?? 0,
+                              CusCanceledOrd = subcuscanceledord?.Count ?? 0,
+                              noRecieveOrdStatus = subnoreseivestord?.Count ?? 0
+                          }) ;
 
             foreach (var r in result)
             {
-                ReportByNet reportByNet = new ReportByNet(r.NameFull,r.OrdersCount, r.SoldOrders,
-                   r.TimeOutCanceledOrders,r.CusCanceledOrd,r.NoEndStatus, r.CanceledOrders,r.noRecieveOrdStatus);
+                ReportByNet reportByNet = new ReportByNet(r.NameFull, r.OrdersCount, r.SoldOrders,
+                    r.TimeOutCanceledOrders, r.CusCanceledOrd, r.NoEndStatus, r.CanceledOrders, r.noRecieveOrdStatus);
                 reportByNets.Add(reportByNet);
+                Console.WriteLine("This: " + "" + reportByNet.StoreName);
             }
             return reportByNets;
-
-        }      
-
-
+        } 
     }
 }

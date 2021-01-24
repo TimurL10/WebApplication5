@@ -490,8 +490,7 @@ namespace WebApplication5.DAL
                 }
             }
             return marketNames;
-        }
-        
+        }       
 
         public List<MarketNames> GetEachStoreOrdersCount(string start, string end)
         {
@@ -509,7 +508,7 @@ namespace WebApplication5.DAL
                                         JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
-                                        AND h.timestamp  between '2021-01-01' and ('2021-01-10')
+                                        AND h.timestamp  between {start} and ({end})
                                         GROUP BY p.NameFull");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);
@@ -543,7 +542,6 @@ namespace WebApplication5.DAL
             }
             return marketNames;
         }
-
         public List<MarketNames> GetEachStoreCancelOrdersCount(string start, string end)
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
@@ -562,7 +560,7 @@ namespace WebApplication5.DAL
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
 
-                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.date between {start} and {end} and s.status = 100
                                         and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (202,212) )
                                         GROUP BY h.StoreId");
 
@@ -597,7 +595,6 @@ namespace WebApplication5.DAL
             }
             return MarketNames;
         }
-
         public List<MarketNames> GetEachStoreSoldOrdersCount(string start, string end)
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
@@ -616,7 +613,7 @@ namespace WebApplication5.DAL
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
 
-                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.date between {start} and {end} and s.status = 100
                                         and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (210) )
                                         GROUP BY h.StoreId");
 
@@ -651,7 +648,6 @@ namespace WebApplication5.DAL
             }
             return MarketNames;
         }
-
         public List<MarketNames> GetEachStoreNoEndStatus(string start, string end)
         {
             string netGuid = "'efb05410-ba92-4a73-a37f-f05f9a499ded'";
@@ -670,7 +666,7 @@ namespace WebApplication5.DAL
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
 
-                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.date between {start} and {end} and s.status = 100
                                         and h.orderid not in (select orderid from [Documents].[OrderStatuses] where [status] in (202,212,205,211,210) )
                                         GROUP BY h.StoreId");
 
@@ -723,7 +719,7 @@ namespace WebApplication5.DAL
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
 
-                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.date between {start} and {end} and s.status = 100
                                         and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (205) )
                                         GROUP BY h.StoreId");
 
@@ -776,7 +772,7 @@ namespace WebApplication5.DAL
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
 
-                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
+                                        and h.date between {start} and {end} and s.status = 100
                                         and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (211) )
                                         GROUP BY h.StoreId");
 
@@ -828,8 +824,8 @@ namespace WebApplication5.DAL
                                         JOIN [References].[UnionNetSync] n ON n.id = p.id_pn_unionnet 
                                         WHERE n.Real_Net_Guid = {netGuid}
                                         AND p.Actual = 1)
-                                        and h.date between '2021-01-01' and '2021-01-09' and s.status = 100
-                                        and h.orderid in (select orderid from [Documents].[OrderStatuses] where [status] in (200,201,202,211) )
+                                        and h.date between {start} and {end} and s.status = 100
+                                        and h.orderid not in (select orderid from [Documents].[OrderStatuses] where [status] in (200,201,202,211) )
                                         GROUP BY h.StoreId");
 
                 SqlCommand command = new SqlCommand(sqlCommand, (SqlConnection)connection);

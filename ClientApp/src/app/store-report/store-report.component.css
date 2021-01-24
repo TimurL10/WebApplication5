@@ -1,1 +1,11 @@
-﻿
+
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+button {
+  margin: 16px 8px;
+}

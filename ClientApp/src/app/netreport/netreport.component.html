@@ -12,12 +12,15 @@
     <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
     <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
   </mat-form-field>
+
+  <button class="mat-raised-button"
+          type="button"
+          (click)="loadReport()">
+    Создать Отчет
+  </button>
 </div>
 
-<button class="btn btn-primary"
-        type="button"
-        (click)="loadReport()"> Создать Отчет
-</button>
+
 
 <div class="table-responsive" *ngIf="report"> 
   <table class="table table-sm table-bordered">
@@ -41,6 +44,7 @@
     </thead>
     <tbody>
       <tr>
+        <td>{{report?.storeName}}</td>
         <td><span>{{report?.storesCount}}</span></td>
         <td>{{report?.ordersCount}}</td>
         <td><span>{{report?.soldOrders}}</span></td>
